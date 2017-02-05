@@ -1,5 +1,5 @@
 {
-    "name": "fabic/jpgraph",
+    "name": "mikaelkael/jpgraph",
     "type": "library",
     "description": "jpGraph, library to make graphs and charts",
     "keywords": ["graph","chart","pie","jpgraph","data"],

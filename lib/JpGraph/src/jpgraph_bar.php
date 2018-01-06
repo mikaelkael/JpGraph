@@ -681,7 +681,7 @@ class GroupBarPlot extends BarPlot {
     private $nbrplots=0;
     //---------------
     // CONSTRUCTOR
-    function __construct($plots) {
+    function GroupBarPlot($plots) {
         $this->width=0.7;
         $this->plots = $plots;
         $this->nbrplots = count($plots);
@@ -747,8 +747,6 @@ class GroupBarPlot extends BarPlot {
         $tmp=$xscale->off;
         $n = count($this->plots);
         $subwidth = $this->width/$this->nbrplots ;
-		if ($this->abswidth) $subwidth = $this->abswidth/$this->nbrplots ;
-		else $subwidth = $this->width/$this->nbrplots ;
 
         for( $i=0; $i < $n; ++$i ) {
             $this->plots[$i]->ymin=$this->ybase;
@@ -759,8 +757,7 @@ class GroupBarPlot extends BarPlot {
             // If we assume it is always one the positioning will work
             // fine with a text scale but this will not work with
             // arbitrary linear scale
-			if ($this->abswidth) $xscale->off = $tmp+$i*($subwidth+1);
-			else $xscale->off = $tmp+$i*round($xscale->scale_factor* $subwidth);
+            $xscale->off = $tmp+$i*round($xscale->scale_factor* $subwidth);
             $this->plots[$i]->Stroke($img,$xscale,$yscale);
         }
         $xscale->off=$tmp;
@@ -776,7 +773,7 @@ class AccBarPlot extends BarPlot {
     private $nbrplots=0;
     //---------------
     // CONSTRUCTOR
-    function __construct($plots, $aDatax=false) {
+    function __construct($plots) {
         $this->plots = $plots;
         $this->nbrplots = count($plots);
         if( $this->nbrplots < 1 ) {
@@ -801,17 +798,6 @@ class AccBarPlot extends BarPlot {
         $this->SetWeight(0);
 
         $this->numpoints = $plots[0]->numpoints;
-
-		if( is_array($aDatax) ) {
-			$this->coords[1]=$aDatax;
-			$n = count($aDatax);
-			for( $i=0; $i < $n; ++$i ) {
-				if( !is_numeric($aDatax[$i]) ) {
-					JpGraphError::RaiseL(25070);
-				}
-			}
-		}
-
         $this->value = new DisplayValue();
     }
 
@@ -864,10 +850,6 @@ class AccBarPlot extends BarPlot {
         // Bar always start at baseline
         if( $ymax <= $this->ybase )
         $ymax = $this->ybase;
-
-		if( isset($this->coords[1]) ) {
-			$xmax=max($this->coords[1]);
-		}
         return array($xmax,$ymax);
     }
 
@@ -900,10 +882,6 @@ class AccBarPlot extends BarPlot {
         // Bar always start at baseline
         if( $ymin >= $this->ybase )
         $ymin = $this->ybase;
-
-		if( isset($this->coords[1]) ) {
-			$xmin=min($this->coords[1]);
-		}
         return array($xmin,$ymin);
     }
 
@@ -930,13 +908,7 @@ class AccBarPlot extends BarPlot {
                     $accy_neg+=$this->plots[$j]->coords[0][$i];
                 }
 
-				if( isset($this->coords[1]) ) {
-					$x=$this->coords[1][$i];
-				}
-				else {
-					$x=$i;
-				}
-				$xt=$xscale->Translate($x);
+                $xt=$xscale->Translate($i);
 
                 if( $this->abswidth > -1 ) {
                     $abswidth=$this->abswidth;

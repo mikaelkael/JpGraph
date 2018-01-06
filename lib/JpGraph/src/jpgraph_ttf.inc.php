@@ -181,10 +181,6 @@ class LanguageConv {
             return $unistring;
         }
         elseif( $aFF === FF_SIMSUN ) {
-        	// UTF-8 Chinese
-        	if(mb_detect_encoding($aTxt, array('UTF-8')) == 'UTF-8') {
-        		return $aTxt;
-        	}
             // Do Chinese conversion
             if( $this->g2312 == null ) {
                 include_once 'jpgraph_gb2312.php' ;

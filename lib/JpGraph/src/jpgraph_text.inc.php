@@ -174,27 +174,27 @@ class Text {
     }
 
     // Total width of text
-    function GetWidth(Image $aImg) {
+    function GetWidth($aImg) {
         $aImg->SetFont($this->font_family,$this->font_style,$this->raw_font_size);
         $w = $aImg->GetTextWidth($this->t,$this->dir);
         return $w;
     }
 
     // Hight of font
-    function GetFontHeight(Image $aImg) {
+    function GetFontHeight($aImg) {
         $aImg->SetFont($this->font_family,$this->font_style,$this->raw_font_size);
         $h = $aImg->GetFontHeight();
         return $h;
 
     }
 
-    function GetTextHeight(Image $aImg) {
+    function GetTextHeight($aImg) {
         $aImg->SetFont($this->font_family,$this->font_style,$this->raw_font_size);
         $h = $aImg->GetTextHeight($this->t,$this->dir);
         return $h;
     }
 
-    function GetHeight(Image $aImg) {
+    function GetHeight($aImg) {
     // Synonym for GetTextHeight()
         $aImg->SetFont($this->font_family,$this->font_style,$this->raw_font_size);
         $h = $aImg->GetTextHeight($this->t,$this->dir);
@@ -234,7 +234,7 @@ class Text {
     }
 
     // Display text in image
-    function Stroke(Image $aImg,$x=null,$y=null) {
+    function Stroke($aImg,$x=null,$y=null) {
 
         if( $x !== null ) $this->x = round($x);
         if( $y !== null ) $this->y = round($y);

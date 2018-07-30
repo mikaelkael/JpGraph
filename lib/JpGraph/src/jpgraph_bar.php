@@ -1111,14 +1111,13 @@ class AccBarPlot extends BarPlot {
 
             // First stroke the accumulated value for the entire bar
             // This value is always placed at the top/bottom of the bars
-            if( $accy_neg < 0 ) {
+            if( $accy + $accy_neg < 0 ) {
                 $y=$yscale->Translate($accy_neg);
-                $this->value->Stroke($img,$accy_neg,$x,$y);
             }
             else {
                 $y=$yscale->Translate($accy);
-                $this->value->Stroke($img,$accy,$x,$y);
             }
+            $this->value->Stroke($img,$accy + $accy_neg,$x,$y);
 
             $accy = 0;
             $accy_neg = 0;

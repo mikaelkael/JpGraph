@@ -19,7 +19,7 @@ require_once('jpgraph_theme.inc.php');
 require_once('gd_image.inc.php');
 
 // Version info
-define('JPG_VERSION','4.1.1');
+define('JPG_VERSION','4.2.2');
 
 // Minimum required PHP version
 define('MIN_PHPVERSION','5.1.0');
@@ -1367,7 +1367,7 @@ class Graph {
 
         // Now reconstruct any user URL argument
         reset($_GET);
-        while( list($key,$value) = each($_GET) ) {
+        foreach ($_GET as $key => $value) {
             if( is_array($value) ) {
                 foreach ( $value as $k => $v ) {
                     $urlarg .= '&amp;'.$key.'%5B'.$k.'%5D='.urlencode($v);
@@ -1382,7 +1382,7 @@ class Graph {
         // but there is little else we can do. One idea for the
         // future might be recreate the POST header in case.
         reset($_POST);
-        while( list($key,$value) = each($_POST) ) {
+        foreach ($_POST as $key => $value) {
             if( is_array($value) ) {
                 foreach ( $value as $k => $v ) {
                     $urlarg .= '&amp;'.$key.'%5B'.$k.'%5D='.urlencode($v);
@@ -1492,7 +1492,7 @@ class Graph {
         else {
             $txts = $this->texts;
         }
-        $n = count($txts);
+        $n = is_array($txts) ? count($txts) : 0;
         $min=null;
         $max=null;
         for( $i=0; $i < $n; ++$i ) {
@@ -1521,7 +1521,7 @@ class Graph {
         else {
             $txts = $this->texts;
         }
-        $n = count($txts);
+        $n = is_array($txts) ? count($txts) : 0;
         $min=null;
         $max=null;
         for( $i=0; $i < $n; ++$i ) {
@@ -3021,7 +3021,7 @@ class Graph {
 
     // Get Y min and max values for added lines
     function GetLinesYMinMax( $aLines ) {
-        $n = count($aLines);
+        $n = is_array($aLines) ? count($aLines) : 0;
         if( $n == 0 ) return false;
         $min = $aLines[0]->scaleposition ;
         $max = $min ;
@@ -3039,7 +3039,7 @@ class Graph {
 
     // Get X min and max values for added lines
     function GetLinesXMinMax( $aLines ) {
-        $n = count($aLines);
+        $n = is_array($aLines) ? count($aLines) : 0;
         if( $n == 0 ) return false ;
         $min = $aLines[0]->scaleposition ;
         $max = $min ;
@@ -3588,7 +3588,7 @@ class Grid {
 
             if( $this->fill ) {
                 // Draw filled areas
-                $y2 = $aTicksPos[0];
+                $y2 = !empty($aTicksPos) ? $aTicksPos[0] : null;
                 $i=1;
                 while( $i < $nbrgrids ) {
                     $y1 = $y2;
@@ -4335,14 +4335,14 @@ class LinearTicks extends Ticks {
     }
 
     function HaveManualLabels() {
-        return count($this->iManualTickLabels) > 0;
+        return is_array($this->iManualTickLabels) ? count($this->iManualTickLabels) > 0 : false;
     }
 
     // Specify all the tick positions manually and possible also the exact labels
     function _doManualTickPos($aScale) {
         $n=count($this->iManualTickPos);
-        $m=count($this->iManualMinTickPos);
-        $doLbl=count($this->iManualTickLabels) > 0;
+        $m= is_array($this->iManualMinTickPos) ? count($this->iManualMinTickPos) : 0;
+        $doLbl= is_array($this->iManualTickLabels) ? count($this->iManualTickLabels) > 0 : false;
 
         $this->maj_ticks_pos = array();
         $this->maj_ticklabels_pos = array();

@@ -19,7 +19,7 @@ require_once('jpgraph_theme.inc.php');
 require_once('gd_image.inc.php');
 
 // Version info
-define('JPG_VERSION','4.2.2');
+define('JPG_VERSION','4.2.6');
 
 // Minimum required PHP version
 define('MIN_PHPVERSION','5.1.0');
@@ -740,11 +740,6 @@ class Graph {
     // Rotate the graph 90 degrees and set the margin
     // when we have done a 90 degree rotation
     function Set90AndMargin($lm=0,$rm=0,$tm=0,$bm=0) {
-        $lm = $lm ==0 ? floor(0.2 * $this->img->width)  : $lm ;
-        $rm = $rm ==0 ? floor(0.1 * $this->img->width)  : $rm ;
-        $tm = $tm ==0 ? floor(0.2 * $this->img->height) : $tm ;
-        $bm = $bm ==0 ? floor(0.1 * $this->img->height) : $bm ;
-
         $adj = ($this->img->height - $this->img->width)/2;
         $this->img->SetMargin($tm-$adj,$bm-$adj,$rm+$adj,$lm+$adj);
         $this->img->SetCenter(floor($this->img->width/2),floor($this->img->height/2));
@@ -1290,9 +1285,11 @@ class Graph {
             }
         }
 
-        $n = count($this->iTables);
-        for( $i=0; $i < $n; ++$i ) {
-            $csim .= $this->iTables[$i]->GetCSIMareas();
+        if($this->iTables != null) {
+            $n = count($this->iTables);
+            for ($i = 0; $i < $n; ++$i) {
+                $csim .= $this->iTables[$i]->GetCSIMareas();
+            }
         }
 
         return $csim;
@@ -1572,8 +1569,10 @@ class Graph {
             foreach( $this->y2plots as $p ) {
                 list($xmin,$ymin) = $p->Min();
                 list($xmax,$ymax) = $p->Max();
-                $min = Min($xmin,$min);
-                $max = Max($xmax,$max);
+                if( $xmin !== null && $xmax !== null ) {
+                    $min = Min($xmin, $min);
+                    $max = Max($xmax, $max);
+                }
             }
         }
 
@@ -1583,8 +1582,10 @@ class Graph {
                 foreach( $this->ynplots[$i] as $p ) {
                     list($xmin,$ymin) = $p->Min();
                     list($xmax,$ymax) = $p->Max();
-                    $min = Min($xmin,$min);
-                    $max = Max($xmax,$max);
+                    if( $xmin !== null && $xmax !== null ) {
+                        $min = Min($xmin, $min);
+                        $max = Max($xmax, $max);
+                    }
                 }
             }
         }
@@ -5009,7 +5010,7 @@ class LinearScale {
             $this->off=$img->left_margin;
             $this->scale_factor = 0;
             if( $this->world_size > 0 ) {
-                $this->scale_factor=$this->world_abs_size/($this->world_size*1.0);
+                $this->scale_factor=$this->world_abs_size/($this->world_size*0.999999);
             }
         }
         else { // y scale
@@ -5017,7 +5018,7 @@ class LinearScale {
             $this->off=$img->top_margin+$this->world_abs_size;
             $this->scale_factor = 0;
             if( $this->world_size > 0 ) {
-                $this->scale_factor=-$this->world_abs_size/($this->world_size*1.0);
+                $this->scale_factor=-$this->world_abs_size/($this->world_size*0.999999);
             }
         }
         $size = $this->world_size * $this->scale_factor;

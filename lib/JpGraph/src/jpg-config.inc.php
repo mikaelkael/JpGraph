@@ -136,12 +136,4 @@ define('DEFAULT_THEME_CLASS', \JpGraph\GlobalConfig::get('DEFAULT_THEME_CLASS'))
 define('SUPERSAMPLING', \JpGraph\GlobalConfig::get('SUPERSAMPLING'));
 define('SUPERSAMPLING_SCALE', \JpGraph\GlobalConfig::get('SUPERSAMPLING_SCALE'));
 
-// Fix for error -> The function imageantialias() is not available in your PHP installation. Use the GD version that comes with PHP and not the standalone version.
-// ( FabiC.2015-08-07 : This is from https://github.com/tstrijdhorst/JpGraph/commit/9e503f4 )
-if(!function_exists('imageantialias'))
-{
-	function imageantialias($image, $enabled)
-	{
-		return false;
-	}
-}
+?>

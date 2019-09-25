@@ -716,7 +716,7 @@ class GroupBarPlot extends BarPlot {
         $n = count($this->plots);
         for($i=0; $i < $n; ++$i) {
             list($xm,$ym) = $this->plots[$i]->Min();
-            $xmin = max($xmin,$xm);
+            $xmin = min($xmin,$xm);
             $ymin = min($ymin,$ym);
         }
         return array($xmin,$ymin);

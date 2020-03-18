@@ -1,54 +1,46 @@
 <?php // content="text/plain; charset=utf-8"
 require_once ('jpgraph/jpgraph.php');
-require_once ('jpgraph/jpgraph_line.php');
+require_once ('jpgraph/jpgraph_pie.php');
+require_once ('jpgraph/jpgraph_pie3d.php');
 
-$datay1 = 	array(50, 60, 70);
-$datay2 = 	array(20, 30, 40);
-$datay3 = 	array(50, 60, 70);
+// Some data
+$data = array(20,27,45,75,90);
 
-// Create the graph. These two calls are always required
-$graph = new Graph(300,200);
-$graph->clearTheme();
-$graph->SetScale("textlin");
+// Create the Pie Graph.
+$graph = new PieGraph(350,200);
 $graph->SetShadow();
-$graph->img->SetMargin(40,30,20,40);
 
-// Create the linear plots for each category
-$dplot[] = new LinePLot($datay1);
-$dplot[] = new LinePLot($datay2);
-$dplot[] = new LinePLot($datay3);
+// Set A title for the plot
+$graph->title->Set("Example 5 3D Pie plot");
+$graph->title->SetFont(FF_VERDANA,FS_BOLD,18);
+$graph->title->SetColor("darkblue");
+$graph->legend->Pos(0.1,0.2);
 
-$dplot[0]->value->Show();
-$dplot[0]->value->SetFont(FF_DEFAULT, FS_NORMAL, 6);
-//$dplot[0]->value->SetMargin(-10);
-$dplot[0]->value->SetAlign('center', 'center');
-$dplot[1]->value->Show();
-$dplot[1]->value->SetFont(FF_DEFAULT, FS_NORMAL, 6);
-$dplot[1]->value->SetAlign('center', 'top');
-$dplot[2]->value->Show();
-//$dplot[2]->value->SetMargin(-10);
-$dplot[2]->value->SetFont(FF_DEFAULT, FS_NORMAL, 6);
-$dplot[2]->value->SetAlign('center', 'top');
+// Create 3D pie plot
+$p1 = new PiePlot3d($data);
+$p1->SetTheme("sand");
+$p1->SetCenter(0.4);
+$p1->SetSize(80);
 
-$dplot[0]->SetFillColor("red");
-$dplot[1]->SetFillColor("blue");
-$dplot[2]->SetFillColor("green");
+// Adjust projection angle
+$p1->SetAngle(45);
 
-// Create the accumulated graph
-$accplot = new AccLinePlot($dplot);
+// Adjsut angle for first slice
+$p1->SetStartAngle(45);
 
-// Add the plot to the graph
-$graph->Add($accplot);
+// Display the slice values
+$p1->value->SetFont(FF_ARIAL,FS_BOLD,11);
+$p1->value->SetColor("navy");
 
-$graph->xaxis->SetTextTickInterval(2);
-$graph->title->Set("Example 17");
-$graph->xaxis->title->Set("X-title");
-$graph->yaxis->title->Set("Y-title");
+// Add colored edges to the 3D pie
+// NOTE: You can't have exploded slices with edges!
+$p1->SetEdge("navy");
 
-$graph->title->SetFont(FF_FONT1,FS_BOLD);
-$graph->yaxis->title->SetFont(FF_FONT1,FS_BOLD);
-$graph->xaxis->title->SetFont(FF_FONT1,FS_BOLD);
+$p1->SetLegends(array("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct"));
 
-// Display the graph
+$graph->Add($p1);
 $graph->Stroke();
+
 ?>
+
+

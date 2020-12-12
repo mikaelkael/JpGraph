@@ -1,26 +1,31 @@
-<?php
-header("Content-type: image/jpeg");
-$im  = imagecreatetruecolor(300, 300);
-$w   = imagecolorallocate($im, 255, 255, 255);
-$red = imagecolorallocate($im, 255, 0, 0);
+<?php // content="text/plain; charset=utf-8"
+require_once ('jpgraph/jpgraph.php');
+require_once ('jpgraph/jpgraph_line.php');
+//require_once ('jpgraph/jpgraph_regstat.php');
 
-/* Draw a dashed line, 5 red pixels, 5 white pixels */
-$style = array($red, $red, $red, $red, $red, $w, $w, $w, $w);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
-//$style = array(862038515, 862038515, 862038515, 862038515, 862038515, -6, -6, -6, -6);
-imagesetstyle($im, $style);
-imageline($im, 0, 0, 300, 300, IMG_COLOR_STYLED);
+$graph = new Graph(1168,170);
+$graph->SetMargin(60,20,20,50);
+$graph->SetScale('textlin');
 
-/* Draw a line of happy faces using imagesetbrush() with imagesetstyle */
-//$style = array($w, $w, $w, $w, $w, $w, $w, $w, $w, $w, $w, $w, $red);
-//imagesetstyle($im, $style);
+$ydata = array(0=> 95.5, 1 => 94.32);
 
-//$brush = imagecreatefrompng("http://www.libpng.org/pub/png/images/smile.happy.png");
-//$w2 = imagecolorallocate($brush, 255, 255, 255);
-//imagecolortransparent($brush, $w2);
-//imagesetbrush($im, $brush);
-//imageline($im, 100, 0, 0, 100, IMG_COLOR_STYLEDBRUSHED);
+$line = new LinePlot($ydata);
+$graph->Add($line);
 
-imagejpeg($im);
-imagedestroy($im);
+$graph->yaxis->HideLine(false);
+$graph->yaxis->HideTicks(false,false);
+$graph->xaxis->HideTicks(false,false);
+$graph->xaxis->SetTextTickInterval(5,4);
+$line->SetLegend('Yield % By Distillation');
+
+$graph->yaxis->title->Set('Yield %');
+$graph->yaxis->SetTitleMargin(40);
+$graph->xgrid->Show();
+$graph->xgrid->SetLineStyle("solid");
+
+$graph->Stroke();
+
 ?>
